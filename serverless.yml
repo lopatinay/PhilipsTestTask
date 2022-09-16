@@ -1,16 +1,47 @@
 service: PhilipsTestTask
 frameworkVersion: '3'
 
+
 provider:
   name: aws
   stage: dev
   runtime: python3.9
   region: eu-central-1
 
+
+plugins:
+  - serverless-python-requirements
+
+
 functions:
   healthcheck:
     handler: service_api/api_v1.healthcheck
     events:
       - http:
-          path: /api/v1/healthcheck
+          path: /healthcheck
           method: get
+
+  GetAnnouncements:
+    handler: service_api/api_v1.get_announcements
+    events:
+      - http:
+          path: /announcements
+          method: get
+
+  CreateAnnouncements:
+    handler: service_api/api_v1.create_announcements
+    events:
+      - http:
+          path: /announcements
+          method: post
+
+  GetAnnouncement:
+    handler: service_api/api_v1.get_announcement
+    events:
+      - http:
+          path: /announcements/{id}
+          method: get
+          request:
+            parameters:
+              paths:
+                id: true
