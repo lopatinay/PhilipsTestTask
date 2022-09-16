@@ -3,12 +3,14 @@ frameworkVersion: '3'
 
 provider:
   name: aws
+  stage: dev
   runtime: python3.9
+  region: eu-central-1
 
 functions:
-  hello:
-    handler: handler.hello
+  healthcheck:
+    handler: service_api/api_v1.healthcheck
     events:
-      - httpApi:
-          path: /
+      - http:
+          path: /api/v1/healthcheck
           method: get

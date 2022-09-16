@@ -1,7 +1,7 @@
 import json
 
 
-def hello(event, context):
+def healthcheck(event, context):
     body = {
         "message": "Go Serverless v3.0! Your function executed successfully!",
         "input": event,
@@ -10,7 +10,3 @@ def hello(event, context):
     response = {"statusCode": 200, "body": json.dumps(body)}
 
     return response
-
-
-if __name__ == "__main__":
-    print(hello(None, None))
