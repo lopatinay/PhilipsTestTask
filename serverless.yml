@@ -7,21 +7,58 @@ provider:
   stage: dev
   runtime: python3.9
   region: eu-central-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:PutItem
+        - dynamodb:BatchWriteItem
+      Resource: "arn:aws:dynamodb:${self:provider.region}:*:table/Announcement*"
 
 
 plugins:
-  - serverless-python-requirements
+   - serverless-python-requirements
+
+
+custom:
+   pythonRequirements:
+      dockerImage: mlupin/docker-lambda:python3.9-build
+      slim: true
+      dockerizePip: true
+      layer: true
+
+
+resources:
+  Resources:
+    Announcement:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: Announcement
+        AttributeDefinitions:
+          - AttributeName: title
+            AttributeType: S
+          - AttributeName: date
+            AttributeType: S
+        KeySchema:
+          - AttributeName: title
+            KeyType: HASH
+          - AttributeName: date
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+package:
+  patterns:
+    - "!./**"
+    - "service_api/**"
 
 
 functions:
-  healthcheck:
-    handler: service_api/api_v1.healthcheck
-    events:
-      - http:
-          path: /healthcheck
-          method: get
 
   GetAnnouncements:
+    layers:
+      - Ref: PythonRequirementsLambdaLayer
     handler: service_api/api_v1.get_announcements
     events:
       - http:
@@ -29,19 +66,10 @@ functions:
           method: get
 
   CreateAnnouncements:
+    layers:
+      - Ref: PythonRequirementsLambdaLayer
     handler: service_api/api_v1.create_announcements
     events:
       - http:
           path: /announcements
           method: post
-
-  GetAnnouncement:
-    handler: service_api/api_v1.get_announcement
-    events:
-      - http:
-          path: /announcements/{id}
-          method: get
-          request:
-            parameters:
-              paths:
-                id: true
