@@ -2,6 +2,7 @@
 task_descriptions/
 
 # Distribution / packaging
+__pycache__/
 node_modules/
 .idea/
 .venv/
