@@ -2,6 +2,10 @@
   "devDependencies": {
     "serverless-api-gateway-throttling": "^2.0.2",
     "serverless-layers": "^2.5.4",
+    "serverless-offline": "^10.1.0",
     "serverless-python-requirements": "^5.4.0"
+  },
+  "dependencies": {
+    "serverless": "^3.22.0"
   }
 }

@@ -4,7 +4,6 @@ frameworkVersion: '3'
 
 provider:
   name: aws
-  stage: dev
   runtime: python3.9
   region: eu-central-1
   memorySize: 128
@@ -20,8 +19,8 @@ provider:
 
 
 plugins:
-   - serverless-python-requirements
-   - serverless-api-gateway-throttling
+  - serverless-python-requirements
+  - serverless-api-gateway-throttling
 
 
 custom:
