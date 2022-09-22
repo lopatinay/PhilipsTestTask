@@ -63,33 +63,3 @@ def create_announcements(event, context):
         return Response(HTTPStatus.BAD_REQUEST, {"message": e.messages}).json
 
     return Response(HTTPStatus.CREATED, serialized_announcement).json
-
-
-def get_announcement(event, context):
-    announcement_id = event['pathParameters']['id']
-
-    try:
-        announcement_id = int(announcement_id)
-    except ValueError:
-        app_logger.exception("Can't convert '%s' to int" % announcement_id)
-        return Response(
-            HTTPStatus.BAD_REQUEST,
-            {"message": f"Value '{announcement_id}' should be a number"}
-        ).json
-
-    try:
-        announcement = Announcements.get_announcement(announcement_id)
-    except Exception:
-        app_logger.exception("An unexpected error has occurred")
-        return Response(
-            HTTPStatus.INTERNAL_SERVER_ERROR,
-            {"message": "An unexpected error has occurred"}
-        )
-
-    try:
-        serialized_announcement = AnnouncementSerializer().dumps(announcement)
-    except ValidationError as e:
-        app_logger.exception("ValidationError")
-        return Response(HTTPStatus.BAD_REQUEST, {"message": e.messages}).json
-
-    return Response(HTTPStatus.OK, serialized_announcement).json
