@@ -2,6 +2,7 @@
 task_descriptions/
 
 # Distribution / packaging
+.pytest_cache/
 __pycache__/
 node_modules/
 .idea/
